@@ -1,9 +1,6 @@
 /* eslint-disable */
 import db from '../../fb/firebaseInit';
-
-setTimeout(() => {
-    
-}, 2000);
+import router from '../../router'
 
 // State
 const state = {
@@ -21,30 +18,36 @@ const actions = {
                     id: doc.id,
                     ...doc.data()
                 });
-                // db.collection("clients")
-                // .onSnapshot(snap => {
-                //     snap.forEach(doc => {
-                //         console.log(doc.data());
-                //     });
-                // })
-                // .then();
                 commit('allClients', clients)
             });
         });
     },
-    getClientById({commit}, clientId){
-        db.collection('clients').where('id', '==', clientId).get().then(querySnapshot => {
-            querySnapshot.forEach(doc => {
-                commit('client',{id: doc.id, ...doc.data()});
-            });
-        });
+    getClientById({commit}, id){
+        db.collection('clients').doc(id).get().then(doc => {
+            commit('client', {id: doc.id, ...doc.data()});
+        })
     },
     deleteClient({commit}, clientId){
-        db.collection('clients').where('id', '==', clientId).get().then(querySnapshot => {
-            querySnapshot.forEach(doc => {
-                doc.ref.delete();
-                commit('deleteClient');
-            });
+        db.collection('clients').doc(clientId).get().then(doc => {
+            doc.ref.delete();
+            router.push({path:'/'});
+        });
+    },
+    updateClient({commit}, client){
+        db.collection('clients').doc(client.id).update(client)
+          .then(() => {
+              commit('client', client);
+              router.push({path:`${client.id}`})
+          })
+          .catch(error => console.log(error));
+    },
+    addClient({commit}, client){
+        db.collection('clients').add(client).then(() => {
+            // redirec to dashboard
+            router.push({path:'/'})
+            // show success message
+        }).catch(error => {
+            // show error message
         });
     }
 };
@@ -69,3 +72,5 @@ export default {
     actions,
     mutations
 }
+
+

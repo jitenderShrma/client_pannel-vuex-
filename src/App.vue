@@ -1,17 +1,20 @@
 <template>
   <div id="app">
-    <!-- {{allClients}} -->
-  <router-view></router-view>
+    <Navbar/>
+  <div class="container">
+    <router-view></router-view>
+  </div>
   </div>
 </template>
 
 <script>
 /* eslint-disable */
 import { mapGetters } from 'vuex';
+import Navbar from './components/layout/Navbar';
 export default {
   name: 'app',
   components: {
-
+    Navbar
   },
   computed: mapGetters(['allClients'])
 }
@@ -24,6 +27,6 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  margin: 0;
 }
 </style>
