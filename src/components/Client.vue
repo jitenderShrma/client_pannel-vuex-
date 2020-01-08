@@ -13,7 +13,9 @@
         </div>
     </div>
 </div>
+
 <hr>
+
 <div class="card" v-if="client">
     <div class="card-header">{{client.firstName}} {{client.lastName}}</div>
     <div class="card-body">
